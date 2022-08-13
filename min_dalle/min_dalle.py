@@ -27,7 +27,8 @@ class MinDalle:
         device: str = None,
         is_mega: bool = True, 
         is_reusable: bool = True,
-        is_verbose = True
+        is_verbose: bool = True,
+        load_encoder: bool = True
     ):
         if device == None:
             device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -58,7 +59,8 @@ class MinDalle:
 
         self.init_tokenizer()
         if is_reusable:
-            self.init_encoder()
+            if load_encoder:
+                self.init_encoder()
             self.init_decoder()
             self.init_detokenizer()
 
