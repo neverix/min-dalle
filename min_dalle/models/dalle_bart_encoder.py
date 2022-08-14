@@ -47,11 +47,13 @@ class AttentionBase(nn.Module):
         queries /= queries.shape[-1] ** 0.5
         attention_bias = (1 - attention_mask.to(torch.float32)) * -1e12
         attention_weights: FloatTensor = torch.einsum(
-            'bqhc,bkhc->bhqk',
+            "bqhc,bkhc->bhqk",
             queries, 
             keys
         )
-        attention_weights += attention_bias[:attention_weights.shape[2], :attention_weights.shape[3]]
+        while attention_bias.ndim < 4:
+            attention_bias = attention_bias.unsqueeze(0)
+        attention_weights += attention_bias[:, :, :attention_weights.shape[2], :attention_weights.shape[3]]
         attention_weights = torch.softmax(attention_weights, -1)
         attention_output: FloatTensor = torch.einsum(
             "bhqk,bkhc->bqhc",
