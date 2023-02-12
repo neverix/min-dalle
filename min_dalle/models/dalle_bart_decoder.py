@@ -77,7 +77,7 @@ class DecoderLayer(nn.Module):
         token_count = token_index.shape[1]
         if token_count == 1:
             self_attn_mask = self.token_indices <= token_index
-            self_attn_mask = self_attn_mask[:, None, None, :]
+            self_attn_mask = self_attn_mask[:, None, None, :encoder_state.shape[1]]
         else:
             self_attn_mask = (
                 self.token_indices[None, None, :token_count] <= 
