@@ -102,7 +102,7 @@ class DecoderLayer(nn.Module):
         decoder_state = self.encoder_attn.forward(
             decoder_state=decoder_state,
             encoder_state=encoder_state,
-            attention_mask=attention_mask[:, :, :, :encoder_state.shape[1]]
+            attention_mask=attention_mask[..., :encoder_state.shape[1]]
         )
         decoder_state = self.encoder_attn_layer_norm.forward(decoder_state)
         decoder_state = residual + decoder_state
